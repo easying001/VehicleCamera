@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2016 Baidu, Inc. All Rights Reserved.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              >
+    <TextView
+        android:text="Device Management: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <GridLayout
+        android:background="@drawable/layout_border_shape"
+        android:rowCount="2"
+        android:columnCount="5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/bt_native_start_preview"
+            android:text="NativeStartPreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/bt_native_stop_preview"
+            android:text="NativeStopPreview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/bt_get_device_verison"
+            android:text="GetVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/bt_get_device_param"
+            android:text="GetDeviceParams"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/bt_get_device_time"
+            android:text="GetTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/bt_set_device_time"
+            android:text="SetTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/bt_set_gsensor_sensitivity_high"
+            android:text="SetGSensorHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/bt_set_gsensor_sensitivity_medium"
+            android:text="SetGSensorMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/bt_set_gsensor_sensitivity_low"
+            android:text="SetGSensorLow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/bt_reset_factory_default"
+            android:text="ResetFactory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </GridLayout>
+    <!--<TextView-->
+        <!--android:text="Video Management: "-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--/>-->
+    <!--<LinearLayout-->
+        <!--android:background="@drawable/layout_border_shape"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+
+        <!--<Button-->
+            <!--android:id="@+id/bt_set_video_param"-->
+            <!--android:text="SetVideoParams"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content" />-->
+
+        <!--<Button-->
+            <!--android:id="@+id/bt_get_video_param"-->
+            <!--android:text="GetVideoParams"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+
+    <TextView
+        android:text="Record Management: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <GridLayout
+        android:background="@drawable/layout_border_shape"
+        android:columnCount="5"
+        android:rowCount="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/bt_record_take_pic"
+            android:text="TakePicture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/bt_record_get_state"
+            android:text="GetRecordState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <Button
+            android:id="@+id/bt_record_start"
+            android:text="StartRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <Button
+            android:id="@+id/bt_record_stop"
+            android:text="StopRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <Button
+            android:id="@+id/bt_record_enable_mic"
+            android:text="EnableMic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <Button
+            android:id="@+id/bt_record_disable_mic"
+            android:text="DisableMic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        <Button
+            android:id="@+id/bt_record_protected"
+            android:text="ProtectRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+    </GridLayout>
+
+    <TextView
+        android:text="SDCard Management: "
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <LinearLayout
+        android:background="@drawable/layout_border_shape"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/bt_get_sdcard_remaining"
+            android:text="GetSdCardSpace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/bt_format_sd_card"
+            android:text="FormatSDCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">FileCamera</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string-array name="camera_setting_name">
+        <item>打开或者关闭麦克风</item>
+        <item>设置抖动传感器灵敏度</item>
+        <item>恢复出厂设置</item>
+        <item>格式化SD卡</item>
+        <item>关于</item>
+    </string-array>
+</resources>

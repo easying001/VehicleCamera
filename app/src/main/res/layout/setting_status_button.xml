@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="32dp"
+    android:orientation="horizontal"
+    >
+
+    <RadioGroup
+        android:id="@+id/status_button_group"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <RadioButton
+            android:gravity="center"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:button="@null"
+            android:textColor="@drawable/status_button_text_color_selector"
+            android:background="@drawable/status_button_background_selector"/>
+        <RadioButton
+            android:gravity="center"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:button="@null"
+            android:textColor="@drawable/status_button_text_color_selector"
+            android:background="@drawable/status_button_background_selector"/>
+        <RadioButton
+            android:gravity="center"
+            android:textSize="15sp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:button="@null"
+            android:textColor="@drawable/status_button_text_color_selector"
+            android:background="@drawable/status_button_background_selector"/>
+
+    </RadioGroup>
+</LinearLayout>

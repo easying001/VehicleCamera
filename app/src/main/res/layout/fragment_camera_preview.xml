@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2016 Baidu, Inc. All Rights Reserved.
+  -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <SurfaceView
+            android:id="@+id/sv_camera_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:layout_gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginBottom="10dp">
+
+        <ImageButton
+            android:src="@drawable/fragment_camera_enable_mic"
+            android:id="@+id/ib_enable_mic"
+            android:background="@drawable/bg_round_image_button_selector"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:scaleType="fitCenter"/>
+
+        <ImageButton
+            android:src="@drawable/fragment_camera_unlock_video"
+            android:id="@+id/ib_start_protected_record"
+            android:background="@drawable/bg_round_image_button_selector"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="80dp"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:src="@drawable/fragment_camera_take_photo"
+            android:id="@+id/ib_take_image"
+            android:background="@drawable/bg_round_image_button_selector"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="80dp"
+            />
+
+        <ImageButton
+                android:src="@drawable/fragment_camera_video_start"
+                android:id="@+id/ib_start_record"
+                android:background="@drawable/bg_round_image_button_selector"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="80dp"
+                android:scaleType="fitCenter"/>
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_centerHorizontal="true" />-->
+    </LinearLayout>
+    <!--</RelativeLayout>-->
+</FrameLayout>

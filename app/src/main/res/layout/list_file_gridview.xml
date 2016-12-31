@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="visible">
+        <TextView
+            android:padding="10sp"
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:textSize="18dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue"
+            android:text="tvDate" />
+        <TextView
+            android:id="@+id/tvCount"
+            android:layout_width="wrap_content"
+            android:textSize="14dp"
+            android:textColor="@color/blue"
+            android:layout_height="wrap_content"
+            android:text="tvCount" />
+    </LinearLayout>
+    <GridLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/gridList"
+        android:columnCount="5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </GridLayout>
+</LinearLayout>
+

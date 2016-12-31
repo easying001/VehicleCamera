@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="cl_press_b_tab_press">#003366</color>
+    <color name="cl_bt_bg_press">#0061b0</color>
+    <!-- 底部tab选中态颜色  -->
+    <color name="cl_btn_b_tab_select">#888888FF</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="blue">#FF0000FF</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="grey">#FF888888</color>
+</resources>
