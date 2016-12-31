@@ -47,6 +47,11 @@
             android:resource="@xml/device_filter" />
         </activity>
 
+        <activity android:name=".VideoPlayerActivity"
+                  android:screenOrientation="landscape" >
+
+        </activity>
+
         <receiver
             android:name=".StartupReceiver"
             android:enabled="true">

@@ -152,10 +152,10 @@ public class FileListAdapter extends BaseAdapter {
                             //Toast.makeText(ctx, getString(R.string.file_not_exist_check_sdcard), Toast.LENGTH_SHORT).show();
                             return;
                         }
-//                        Intent intent = new Intent(ctx, MvpVideoPlayer.class);
-//                        intent.putExtra("playFile", path);
-//                        intent.putExtra("allListFile", (Serializable) val);
-//                        ctx.startActivity(intent);
+                        Intent intent = new Intent(ctx, VideoPlayerActivity.class);
+                        intent.putExtra("playFile", path);
+                        intent.putExtra("allListFile", (Serializable) val);
+                        ctx.startActivity(intent);
 
 //                        Intent intent = new Intent(Intent.ACTION_VIEW);
 //                        String strend="";
