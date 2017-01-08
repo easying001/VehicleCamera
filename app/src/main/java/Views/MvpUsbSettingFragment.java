@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -44,14 +45,14 @@ public class MvpUsbSettingFragment extends MvpFragment<MvpUsbSettingPresenter> i
     private View mContentView;
     private Button mGetDevVer;
     private Button mGetDevParam;
-//    private Button mSetVideoParam;
-//    private Button mGetVideoParam;
+    //    private Button mSetVideoParam;
+    //    private Button mGetVideoParam;
     private Button mGetDevTime;
     private Button mTakePic;
-//    private Button mSetRecordState;
+    //    private Button mSetRecordState;
     private Button mGetRecordState;
     private Button mGetSDCardRemaining;
-//    private Button mSwitchModeMsc;
+    //    private Button mSwitchModeMsc;
     private Button mSetDevTime;
     private Button mStartRecord;
     private Button mStopRecord;
@@ -70,6 +71,8 @@ public class MvpUsbSettingFragment extends MvpFragment<MvpUsbSettingPresenter> i
     private MvpStatusButton mBtnGSensor;
     private MvpStatusButton mBtnMic;
     private ListView mListView;
+    private Handler mHandler = new Handler();
+
     private SettingListAdapter mAdapter;
     ArrayList<MvpSettiingItem> mSettingList = new ArrayList<MvpSettiingItem>();
 
@@ -157,7 +160,7 @@ public class MvpUsbSettingFragment extends MvpFragment<MvpUsbSettingPresenter> i
         mNativeStopPreview.setOnClickListener(this);
         mNativeStartPreview.setOnClickListener(this);
 */
-        presenter.init();
+/*        presenter.init();
         presenter.updateSettings();
         mSettingList.get(0).mValue = presenter.getMicLevel();
         mSettingList.get(1).mValue = presenter.getSensorLevel();
@@ -165,10 +168,29 @@ public class MvpUsbSettingFragment extends MvpFragment<MvpUsbSettingPresenter> i
         mAdapter = new SettingListAdapter(this.getActivity().getApplicationContext(), mSettingList,
                 mOnStatusButtonClicked);
         mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(this);*/
+
+
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("UsbActivity", "list_init");
+                presenter.init();
+                set_list_init();
+            }
+        }, 1);
+
+        mAdapter = new SettingListAdapter(this.getActivity().getApplicationContext(), mSettingList,
+                mOnStatusButtonClicked);
+        mListView.setAdapter(mAdapter);
         mListView.setOnItemClickListener(this);
 
-
         return mContentView;
+    }
+    public void set_list_init() {
+        presenter.updateSettings();
+        mSettingList.get(0).mValue = presenter.getMicLevel();
+        mSettingList.get(1).mValue = presenter.getSensorLevel();
     }
 
     @Override
@@ -178,9 +200,14 @@ public class MvpUsbSettingFragment extends MvpFragment<MvpUsbSettingPresenter> i
 
         } else {
             Log.d("UsbFragment", "Show fragment and send command to sync up usb settings");
-            presenter.updateSettings();
-            mSettingList.get(0).mValue = presenter.getMicLevel();
-            mSettingList.get(1).mValue = presenter.getSensorLevel();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("UsbActivity", "list_init");
+                    set_list_init();
+                }
+            }, 1);
+
             if (mAdapter != null) {
                 mAdapter.notifyDataSetChanged();
             }
@@ -227,38 +254,38 @@ public class MvpUsbSettingFragment extends MvpFragment<MvpUsbSettingPresenter> i
 
     @Override
     public void onClick(View view) {
-       switch(view.getId()) {
-           case R.id.bt_native_start_preview:
-               UsbCameraManager.getInstance().mUVCCamera.setPreviewDisplay(UsbCameraManager.getInstance().mPreviewSurface);
-               UsbCameraManager.getInstance().mUVCCamera.startPreview();
-               break;
-           case R.id.bt_native_stop_preview:
-               UsbCameraManager.getInstance().mUVCCamera.stopPreview();
-               break;
-           case R.id.bt_get_device_verison:
+        switch(view.getId()) {
+            case R.id.bt_native_start_preview:
+                UsbCameraManager.getInstance().mUVCCamera.setPreviewDisplay(UsbCameraManager.getInstance().mPreviewSurface);
+                UsbCameraManager.getInstance().mUVCCamera.startPreview();
+                break;
+            case R.id.bt_native_stop_preview:
+                UsbCameraManager.getInstance().mUVCCamera.stopPreview();
+                break;
+            case R.id.bt_get_device_verison:
                 showToast(presenter.getDeviceVersion());
                 break;
-           case R.id.bt_get_device_param:
-               UsbCameraDeviceParam deviceParam = new UsbCameraDeviceParam();
-               deviceParam = presenter.getDeviceParam();
-               showToast("Year = "+ deviceParam.year + ",GsensorSensitivity = " + deviceParam.gSensorSensitivity);
-               break;
-//           case R.id.bt_get_video_param:
-//               break;
-//           case R.id.bt_set_video_param:
-//
-//               break;
-           case R.id.bt_get_device_time: {
-               SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-               Calendar cal = Calendar.getInstance();
-               TimeZone tz = cal.getTimeZone();
-               dateFormat.setTimeZone(tz);
+            case R.id.bt_get_device_param:
+                UsbCameraDeviceParam deviceParam = new UsbCameraDeviceParam();
+                deviceParam = presenter.getDeviceParam();
+                showToast("Year = "+ deviceParam.year + ",GsensorSensitivity = " + deviceParam.gSensorSensitivity);
+                break;
+            //           case R.id.bt_get_video_param:
+            //               break;
+            //           case R.id.bt_set_video_param:
+            //
+            //               break;
+            case R.id.bt_get_device_time: {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                TimeZone tz = cal.getTimeZone();
+                dateFormat.setTimeZone(tz);
 
-               String devTime = dateFormat.format(new Date(presenter.getDeviceTime() * 1000));
-               showToast(devTime);
-           }
-               break;
-           case R.id.bt_set_device_time:
+                String devTime = dateFormat.format(new Date(presenter.getDeviceTime() * 1000));
+                showToast(devTime);
+            }
+            break;
+            case R.id.bt_set_device_time:
                 long time = System.currentTimeMillis()/1000;
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Calendar cal = Calendar.getInstance();
@@ -268,71 +295,71 @@ public class MvpUsbSettingFragment extends MvpFragment<MvpUsbSettingPresenter> i
                 String devTime = dateFormat.format(time * 1000);
                 showToast("set time = " + devTime + ",longtime = " + time);
                 presenter.setDeviceTime(time, (byte)0x05);
-               break;
-           case R.id.bt_record_get_state:
-               UsbCameraRecordState state = new UsbCameraRecordState();
-               state = presenter.getRecordState();
-               showToast("state=" + state.status + ",FPS=" + state.record_video_fps + ",mic level=" + state.volumn_level);
-               break;
-//           case R.id.bt_record_set_state:
-//               if (presenter.getRecordState().status == UsbRequest.USB_CAMERA_RECORD_STATE_STOPPED) {
-//                   showToast("Set Record State to 1");
-//                   presenter.setRecordState(1); //  start record
-//               } else {
-//                   showToast("Set Record State to 0");
-//                   presenter.setRecordState(0); //  stop record
-//               }
-//               break;
-           case R.id.bt_record_take_pic:
-               showToast("Take 1 Picture");
-               presenter.setTakePicture(1);
-               break;
-           case R.id.bt_get_sdcard_remaining:
-               UsbSdCardSpace space = presenter.getSDCardRemaining();
-               showToast("Remain space in percentage = " + space.remaining + ",Capacity = " + space.capacity);
-               break;
-           case R.id.bt_format_sd_card:
-               showToast("Start Formatting SD Card");
-               presenter.formatSDCard();
-               break;
-           case R.id.bt_reset_factory_default:
-               showToast("Start Formatting SD Card");
-               presenter.resetFactoryDefault();
-               break;
-           case R.id.bt_record_start:
-               showToast("Start Recording");
-               presenter.setRecordState(1);
-               break;
-           case R.id.bt_record_stop:
-               showToast("Stop Recording");
-               presenter.setRecordState(0);
-               break;
-           case R.id.bt_record_protected:
-               showToast("Start Protected Recording for 60 Seconds");
-               presenter.startProtectedRecord(60);
-               break;
-           case R.id.bt_record_enable_mic:
-               showToast("Unmute Mic");
-               presenter.setMic(100);
-               break;
-           case R.id.bt_record_disable_mic:
-               showToast("Mute Mic");
-               presenter.setMic(0);
-               break;
-           case R.id.bt_set_gsensor_sensitivity_high:
-               showToast("Set GSensor Sensitivity to High");
-               presenter.setGSensorSensitivity(1600);
-               break;
-           case R.id.bt_set_gsensor_sensitivity_medium:
-               showToast("Set GSensor Sensitivity to Medium");
-               presenter.setGSensorSensitivity(1000);
-               break;
-           case R.id.bt_set_gsensor_sensitivity_low:
-               showToast("Set GSensor Sensitivity to Low");
-               presenter.setGSensorSensitivity(500);
-               break;
-           default:
-               break;
+                break;
+            case R.id.bt_record_get_state:
+                UsbCameraRecordState state = new UsbCameraRecordState();
+                state = presenter.getRecordState();
+                showToast("state=" + state.status + ",FPS=" + state.record_video_fps + ",mic level=" + state.volumn_level);
+                break;
+            //           case R.id.bt_record_set_state:
+            //               if (presenter.getRecordState().status == UsbRequest.USB_CAMERA_RECORD_STATE_STOPPED) {
+            //                   showToast("Set Record State to 1");
+            //                   presenter.setRecordState(1); //  start record
+            //               } else {
+            //                   showToast("Set Record State to 0");
+            //                   presenter.setRecordState(0); //  stop record
+            //               }
+            //               break;
+            case R.id.bt_record_take_pic:
+                showToast("Take 1 Picture");
+                presenter.setTakePicture(1);
+                break;
+            case R.id.bt_get_sdcard_remaining:
+                UsbSdCardSpace space = presenter.getSDCardRemaining();
+                showToast("Remain space in percentage = " + space.remaining + ",Capacity = " + space.capacity);
+                break;
+            case R.id.bt_format_sd_card:
+                showToast("Start Formatting SD Card");
+                presenter.formatSDCard();
+                break;
+            case R.id.bt_reset_factory_default:
+                showToast("Start Formatting SD Card");
+                presenter.resetFactoryDefault();
+                break;
+            case R.id.bt_record_start:
+                showToast("Start Recording");
+                presenter.setRecordState(1);
+                break;
+            case R.id.bt_record_stop:
+                showToast("Stop Recording");
+                presenter.setRecordState(0);
+                break;
+            case R.id.bt_record_protected:
+                showToast("Start Protected Recording for 60 Seconds");
+                presenter.startProtectedRecord(60);
+                break;
+            case R.id.bt_record_enable_mic:
+                showToast("Unmute Mic");
+                presenter.setMic(100);
+                break;
+            case R.id.bt_record_disable_mic:
+                showToast("Mute Mic");
+                presenter.setMic(0);
+                break;
+            case R.id.bt_set_gsensor_sensitivity_high:
+                showToast("Set GSensor Sensitivity to High");
+                presenter.setGSensorSensitivity(1600);
+                break;
+            case R.id.bt_set_gsensor_sensitivity_medium:
+                showToast("Set GSensor Sensitivity to Medium");
+                presenter.setGSensorSensitivity(1000);
+                break;
+            case R.id.bt_set_gsensor_sensitivity_low:
+                showToast("Set GSensor Sensitivity to Low");
+                presenter.setGSensorSensitivity(500);
+                break;
+            default:
+                break;
         }
     }
 
@@ -352,11 +379,11 @@ public class MvpUsbSettingFragment extends MvpFragment<MvpUsbSettingPresenter> i
                                 presenter.resetFactoryDefault();
                             }
                         }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
-                            }
-                        }).show();
+                    }
+                }).show();
                 break;
             case 3:
                 new AlertDialog.Builder(getView().getContext()).setTitle("系统提示").setMessage("是否格式化SDCARD ? 数据内容将无法恢复")
