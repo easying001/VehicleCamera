@@ -133,6 +133,9 @@ public class MvpUsbFileFragment extends MvpFragment<MvpUsbFilePreseter> implemen
         mFilePictureFragment = MvpUsbFileTypeFragment.newInstance("picture", mUsbRootPath);
         mFileVideoFragment = MvpUsbFileTypeFragment.newInstance("record", mUsbRootPath);
         mFileProtectionFragment = MvpUsbFileTypeFragment.newInstance("protect", mUsbRootPath);
+        if (mFragmentList != null) {
+            mFragmentList.clear();
+        }
         mFragmentList.add(mFilePictureFragment);
         mFragmentList.add(mFileVideoFragment);
         mFragmentList.add(mFileProtectionFragment);
@@ -180,12 +183,15 @@ public class MvpUsbFileFragment extends MvpFragment<MvpUsbFilePreseter> implemen
 
         @Override
         public void onPageSelected(int position) {
-            Animation animation = new TranslateAnimation(one * CurrentIndex, one * position, 0, 0);//显然这个比较简洁，只有一行代码。
-            CurrentIndex = position;
-            animation.setFillAfter(true);// True:图片停在动画结束位置
-            animation.setDuration(300);
-            mTabLine.startAnimation(animation);
-            Toast.makeText(getActivity(), "您选择了"+ mViewPager.getCurrentItem()+"页卡", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "viewpager on page selected position = " + position);
+            if (position == 0) {
+                selectButton(R.id.ib_top_tab_picture);
+            } else if (position == 1) {
+                selectButton(R.id.ib_top_tab_record);
+            } else if (position == 2) {
+                selectButton(R.id.ib_top_tab_protect);
+            }
+
         }
 
         @Override
