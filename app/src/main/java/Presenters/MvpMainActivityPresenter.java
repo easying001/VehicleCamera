@@ -127,18 +127,7 @@ public class MvpMainActivityPresenter extends MvpBasePresenter<MainActivity> {
         // Switch to Usb Storage Fragment
         // Make sure has been switch to usb file mode
         if (isUsbCameraDeviceLoaded()) {
-
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d("UsbActivity", "dismiss progress dialog");
-                    getView().dismissProgressDialog();
-                    mUsbAdapter.setUsbFileMode();
-                    mFragmentManager.showFragment(mUsbFileFragment);
-                }
-            }, 1);
-
-/*            getView().showProgressDialog();
+            getView().showProgressDialog();
             mUsbAdapter.setUsbFileMode();
             mHandler.postDelayed(new Runnable() {
                 @Override
@@ -147,16 +136,16 @@ public class MvpMainActivityPresenter extends MvpBasePresenter<MainActivity> {
                     getView().dismissProgressDialog();
                     mFragmentManager.showFragment(mUsbFileFragment);
                 }
-            }, 5000);*/
-            //            mUsbModeListener = new UsbDeviceModeListener() {
-            //                @Override
-            //                public void onDeviceModeChanged(int mode) {
-            //                    if (mode == USB_MODE_MSC) {
-            //                        getView().dismissProgressDialog();
-            //                        mFragmentManager.showFragment(mUsbFileFragment);
-            //                    }
-            //                }
-            //            };
+            }, 5000);
+//            mUsbModeListener = new UsbDeviceModeListener() {
+//                @Override
+//                public void onDeviceModeChanged(int mode) {
+//                    if (mode == USB_MODE_MSC) {
+//                        getView().dismissProgressDialog();
+//                        mFragmentManager.showFragment(mUsbFileFragment);
+//                    }
+//                }
+//            };
         } else if (isUsbStorageDeviceLoaded()) {
             mFragmentManager.showFragment(mUsbFileFragment);
         }
@@ -233,89 +222,89 @@ public class MvpMainActivityPresenter extends MvpBasePresenter<MainActivity> {
         }
     }
 
-    //    public void showCameraFragment() {
-    //        Log.d("UsbFragment", "mUsbCameraFragment = " + mUsbCameraFragment);
-    //        if (mUsbAdapter != null) {
-    //            IUsbDriver usbDriver = mUsbAdapter.getLoadedDriver();
-    //            if (usbDriver != null) {
-    //                if (usbDriver.getDevice().getProductId() == UsbId.SONIX_STORAGE) {
-    //                    // In MSC mode, show the progress dialog and perform mode switching
-    //                    getView().showProgressDialog();
-    //                    mHandler.postDelayed(new Runnable() {
-    //                        @Override
-    //                        public void run() {
-    //                            Log.d("UsbFragment", "dismiss progress dialog and show Camera Framgnet");
-    //                            // Dismiss the progress dialog until user grant the usb permission
-    //                            getView().dismissProgressDialog();
-    //                            mFragmentManager.showFragment(mUsbCameraFragment);
-    //                        }
-    //                    }, 10000);
-    ////                    mUsbAdapter.registerCallback(new OnDeviceListener() {
-    ////                        @Override
-    ////                        public void onDeviceMounted(UsbDevice device) {
-    ////                            // Dismiss the progress dialog until user grant the usb permission
-    ////                            getView().dismissProgressDialog();
-    ////                            Log.d("UsbPresenter", "onDeviceMounted : " + Integer.toHexString(device.getProductId()));
-    ////                            mFragmentManager.showFragment(mUsbCameraFragment);
-    ////                        }
-    ////                    });
-    //                    // setup device will trigger request permission to set USB mode
-    //                    // once USB MSC device is opened ,the default operation is to swith to Camerma mode
-    //                    Log.d("UsbFragment", "setup and set device to Camera Mode");
-    //                    mUsbAdapter.setupDevice(usbDriver.getDevice());
-    //                    //mUsbAdapter.setUsbCameraMode();
-    //                } else if (usbDriver.getDevice().getProductId() == UsbId.SONIX_BULK && !mUsbAdapter.isPortOpened()) {
-    //                    // In UVC mode, request the usb access permission and load the driver
-    //                    mUsbAdapter.discoverAllDevice();
-    //                    mUsbAdapter.registerCallback(new OnDeviceListener() {
-    //                        @Override
-    //                        public void onDeviceMounted(UsbDevice device) {
-    //                            Log.d("UsbPresenter", "onDeviceMounted : " + Integer.toHexString(device.getProductId()));
-    //                            mFragmentManager.showFragment(mUsbCameraFragment);
-    //                        }
-    //                    });
-    //                } else {
-    //                    mFragmentManager.showFragment(mUsbCameraFragment);
-    //                }
-    //            }
-    //
-    //        }
-    //    }
+//    public void showCameraFragment() {
+//        Log.d("UsbFragment", "mUsbCameraFragment = " + mUsbCameraFragment);
+//        if (mUsbAdapter != null) {
+//            IUsbDriver usbDriver = mUsbAdapter.getLoadedDriver();
+//            if (usbDriver != null) {
+//                if (usbDriver.getDevice().getProductId() == UsbId.SONIX_STORAGE) {
+//                    // In MSC mode, show the progress dialog and perform mode switching
+//                    getView().showProgressDialog();
+//                    mHandler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            Log.d("UsbFragment", "dismiss progress dialog and show Camera Framgnet");
+//                            // Dismiss the progress dialog until user grant the usb permission
+//                            getView().dismissProgressDialog();
+//                            mFragmentManager.showFragment(mUsbCameraFragment);
+//                        }
+//                    }, 10000);
+////                    mUsbAdapter.registerCallback(new OnDeviceListener() {
+////                        @Override
+////                        public void onDeviceMounted(UsbDevice device) {
+////                            // Dismiss the progress dialog until user grant the usb permission
+////                            getView().dismissProgressDialog();
+////                            Log.d("UsbPresenter", "onDeviceMounted : " + Integer.toHexString(device.getProductId()));
+////                            mFragmentManager.showFragment(mUsbCameraFragment);
+////                        }
+////                    });
+//                    // setup device will trigger request permission to set USB mode
+//                    // once USB MSC device is opened ,the default operation is to swith to Camerma mode
+//                    Log.d("UsbFragment", "setup and set device to Camera Mode");
+//                    mUsbAdapter.setupDevice(usbDriver.getDevice());
+//                    //mUsbAdapter.setUsbCameraMode();
+//                } else if (usbDriver.getDevice().getProductId() == UsbId.SONIX_BULK && !mUsbAdapter.isPortOpened()) {
+//                    // In UVC mode, request the usb access permission and load the driver
+//                    mUsbAdapter.discoverAllDevice();
+//                    mUsbAdapter.registerCallback(new OnDeviceListener() {
+//                        @Override
+//                        public void onDeviceMounted(UsbDevice device) {
+//                            Log.d("UsbPresenter", "onDeviceMounted : " + Integer.toHexString(device.getProductId()));
+//                            mFragmentManager.showFragment(mUsbCameraFragment);
+//                        }
+//                    });
+//                } else {
+//                    mFragmentManager.showFragment(mUsbCameraFragment);
+//                }
+//            }
+//
+//        }
+//    }
 
-    //    public void showSettingFragment() {
-    //        Log.d("UsbActivity", "mUsbSettingFragment = " + mUsbSettingFragment);
-    //        if (mUsbAdapter != null) {
-    //            IUsbDriver usbDriver = mUsbAdapter.getLoadedDriver();
-    //            if (usbDriver != null) {
-    //                if (usbDriver.getDevice().getProductId() == UsbId.SONIX_STORAGE) {
-    //                    // In MSC mode, show the progress dialog and perform mode switching
-    //                    getView().showProgressDialog();
-    //                    mUsbAdapter.registerCallback(new OnDeviceListener() {
-    //                        @Override
-    //                        public void onDeviceMounted(UsbDevice device) {
-    //                            // Dismiss the progress dialog until user grant the usb permission
-    //                            getView().dismissProgressDialog();
-    //                            Log.d("UsbPresenter", "onDeviceMounted : " + Integer.toHexString(device.getProductId()));
-    //                            mFragmentManager.showFragment(mUsbSettingFragment);
-    //                        }
-    //                    });
-    //                    mUsbAdapter.setUsbCameraMode();
-    //                } else if (usbDriver.getDevice().getProductId() == UsbId.SONIX_BULK && !mUsbAdapter.isPortOpened()) {
-    //                    // In UVC mode, request the usb access permission and load the driver
-    //                    mUsbAdapter.discoverAllDevice();
-    //                    mUsbAdapter.registerCallback(new OnDeviceListener() {
-    //                        @Override
-    //                        public void onDeviceMounted(UsbDevice device) {
-    //                            Log.d("UsbPresenter", "onDeviceMounted : " + Integer.toHexString(device.getProductId()));
-    //                            mFragmentManager.showFragment(mUsbSettingFragment);
-    //                        }
-    //                    });
-    //                } else {
-    //                    mFragmentManager.showFragment(mUsbSettingFragment);
-    //                }
-    //            }
-    //
-    //        }
-    //    }
+//    public void showSettingFragment() {
+//        Log.d("UsbActivity", "mUsbSettingFragment = " + mUsbSettingFragment);
+//        if (mUsbAdapter != null) {
+//            IUsbDriver usbDriver = mUsbAdapter.getLoadedDriver();
+//            if (usbDriver != null) {
+//                if (usbDriver.getDevice().getProductId() == UsbId.SONIX_STORAGE) {
+//                    // In MSC mode, show the progress dialog and perform mode switching
+//                    getView().showProgressDialog();
+//                    mUsbAdapter.registerCallback(new OnDeviceListener() {
+//                        @Override
+//                        public void onDeviceMounted(UsbDevice device) {
+//                            // Dismiss the progress dialog until user grant the usb permission
+//                            getView().dismissProgressDialog();
+//                            Log.d("UsbPresenter", "onDeviceMounted : " + Integer.toHexString(device.getProductId()));
+//                            mFragmentManager.showFragment(mUsbSettingFragment);
+//                        }
+//                    });
+//                    mUsbAdapter.setUsbCameraMode();
+//                } else if (usbDriver.getDevice().getProductId() == UsbId.SONIX_BULK && !mUsbAdapter.isPortOpened()) {
+//                    // In UVC mode, request the usb access permission and load the driver
+//                    mUsbAdapter.discoverAllDevice();
+//                    mUsbAdapter.registerCallback(new OnDeviceListener() {
+//                        @Override
+//                        public void onDeviceMounted(UsbDevice device) {
+//                            Log.d("UsbPresenter", "onDeviceMounted : " + Integer.toHexString(device.getProductId()));
+//                            mFragmentManager.showFragment(mUsbSettingFragment);
+//                        }
+//                    });
+//                } else {
+//                    mFragmentManager.showFragment(mUsbSettingFragment);
+//                }
+//            }
+//
+//        }
+//    }
 
 }

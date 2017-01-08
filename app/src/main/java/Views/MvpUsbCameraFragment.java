@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.media.Image;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,7 +35,6 @@ public class MvpUsbCameraFragment extends MvpFragment<MvpUsbCameraPresenter> imp
     private ImageButton ib_start_protected_record;
     private SurfaceView mSurfaceView;
     private static ProgressDialog mUsbCameraProgressDialog;
-    private Handler mHandler = new Handler();
 
     public static MvpUsbCameraFragment newInstance() {
         Bundle arguments = new Bundle();
@@ -130,16 +128,7 @@ public class MvpUsbCameraFragment extends MvpFragment<MvpUsbCameraPresenter> imp
                 presenter.enableOrDisableMic();
                 break;
             case R.id.ib_start_protected_record:
-                ib_start_protected_record.setImageResource(R.drawable.fragment_camera_lock_video);
-                ib_start_protected_record.setEnabled(false);
                 presenter.startProtectedRecord();
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        ib_start_protected_record.setEnabled(true);
-                        ib_start_protected_record.setImageResource(R.drawable.fragment_camera_unlock_video);
-                    }
-                }, 10000);
                 break;
             case R.id.ib_take_image:
                 presenter.takeOnePic();
@@ -170,10 +159,10 @@ public class MvpUsbCameraFragment extends MvpFragment<MvpUsbCameraPresenter> imp
         if (mUsbCameraProgressDialog == null) {
             mUsbCameraProgressDialog = ProgressDialog.show(this.getActivity(), "Please Waiting","Detecting Usb Camera Device...");
             mUsbCameraProgressDialog.setCancelable(false);
-        }
-        if (!mUsbCameraProgressDialog.isShowing()) {
-            mUsbCameraProgressDialog.show();
-        }
+            }
+            if (!mUsbCameraProgressDialog.isShowing()) {
+                mUsbCameraProgressDialog.show();
+            }
     }
 
     public void dismissProgressDialog() {

@@ -8,5 +8,3 @@
 /captures
 .externalNativeBuild
 *.o
-*.so
-
