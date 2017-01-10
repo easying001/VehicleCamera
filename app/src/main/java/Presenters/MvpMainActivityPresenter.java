@@ -128,7 +128,7 @@ public class MvpMainActivityPresenter extends MvpBasePresenter<MainActivity> {
         // Make sure has been switch to usb file mode
         if (isUsbCameraDeviceLoaded()) {
             getView().showProgressDialog();
-            mUsbAdapter.setUsbFileMode();
+            //mUsbAdapter.setUsbFileMode();
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -136,12 +136,12 @@ public class MvpMainActivityPresenter extends MvpBasePresenter<MainActivity> {
                     getView().dismissProgressDialog();
                     mFragmentManager.showFragment(mUsbFileFragment);
                 }
-            }, 5000);
+            }, 200);
 //            mUsbModeListener = new UsbDeviceModeListener() {
 //                @Override
 //                public void onDeviceModeChanged(int mode) {
 //                    if (mode == USB_MODE_MSC) {
-//                        getView().dismissProgressDialog();
+//                        getView().\dismissProgressDialog();
 //                        mFragmentManager.showFragment(mUsbFileFragment);
 //                    }
 //                }
