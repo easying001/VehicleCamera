@@ -1,5 +1,6 @@
 package Presenters;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 
 import com.camera.easying.filecamera.FileListAdapter;
@@ -30,12 +31,25 @@ public class MvpUsbFileTypePresenter extends MvpBasePresenter<MvpUsbFileTypeFrag
     private String photoList = "";
     private String mRootPath = "";
     private UsbFileManager mUsbFileManager;
+    private Handler mHandler = new Handler();
+    private String fileType = null;
 
     public void init(String path) {
+
         if (isViewAttached()) {
-            String fileType = getView().getFileType();
+            fileType = getView().getFileType();
+
             mess_storage_path = path;
-            initData(fileType);
+
+            //initData(fileType);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Log.d("UsbActivity", "dismiss progress dialog");
+                    initData(fileType);
+                }
+            }, 5000);
+
         }
     }
 
