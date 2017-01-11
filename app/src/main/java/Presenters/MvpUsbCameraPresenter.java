@@ -21,6 +21,7 @@ import Models.UsbAdapter;
 import Models.UsbCameraManager;
 import Views.MvpUsbCameraFragment;
 import Views.UsbCameraDeviceDialog;
+import com.camera.easying.filecamera.R;
 
 /**
  * Created by think on 2016/9/25.
@@ -194,8 +195,18 @@ public class MvpUsbCameraPresenter extends MvpBasePresenter<MvpUsbCameraFragment
     public void startProtectedRecord() {
         if (mUsbAdapter != null && mUsbAdapter.isUsbCameraOpened()) {
             getView().showToast("开始录制保护视频60秒");
-            mUsbAdapter.startProtectedRecord(60);
+            //mUsbAdapter.startProtectedRecord(60);
 
+            getView().ib_start_protected_record.setImageResource(R.drawable.fragment_camera_lock_video);
+            getView().ib_start_protected_record.setEnabled(false);
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    getView().ib_start_protected_record.setImageResource(R.drawable.fragment_camera_unlock_video);
+                    getView().ib_start_protected_record.setEnabled(true);
+                }
+            }, 60000);
+            mUsbAdapter.startProtectedRecord(60);
         }
     }
     // toggle enable or disable mic

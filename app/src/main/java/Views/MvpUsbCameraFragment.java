@@ -32,7 +32,7 @@ public class MvpUsbCameraFragment extends MvpFragment<MvpUsbCameraPresenter> imp
     private ImageButton ib_start_record;
     private ImageButton ib_start_protected;
     private ImageButton ib_enable_mic;
-    private ImageButton ib_start_protected_record;
+    public ImageButton ib_start_protected_record;
     private SurfaceView mSurfaceView;
     private static ProgressDialog mUsbCameraProgressDialog;
 
