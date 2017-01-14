@@ -80,4 +80,14 @@ public class MainVideoPlayer extends Activity implements EasyVideoCallback {
     public void onSubmit(EasyVideoPlayer player, Uri source) {
         Toast.makeText(this, "Submit", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onNext(EasyVideoPlayer player, Uri source) {
+        Toast.makeText(this, "Skip Next", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPrev(EasyVideoPlayer player, Uri source) {
+        Toast.makeText(this, "Skip Prev", Toast.LENGTH_SHORT).show();
+    }
 }

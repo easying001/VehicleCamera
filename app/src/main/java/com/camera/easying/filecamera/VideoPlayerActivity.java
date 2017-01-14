@@ -5,6 +5,8 @@ package com.camera.easying.filecamera;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.List;
 
 import com.afollestad.easyvideoplayer.EasyVideoCallback;
 import com.afollestad.easyvideoplayer.EasyVideoPlayer;
@@ -24,6 +26,8 @@ import android.util.Log;
 public class VideoPlayerActivity extends Activity implements EasyVideoCallback {
     private static final String TAG = VideoPlayerActivity.class.getSimpleName();
     private EasyVideoPlayer mVideoPlayer;
+    private List<ListFile> mPlayList;
+    private String mPlayFile;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,15 +35,19 @@ public class VideoPlayerActivity extends Activity implements EasyVideoCallback {
         setContentView(R.layout.easy_video_player);
         mVideoPlayer = (EasyVideoPlayer) findViewById(R.id.video_player);
         Intent intent = getIntent();
-        String file = intent.getStringExtra("playFile");
-        Log.d(TAG, "file = " + file);
+        Bundle bundle = intent.getExtras();
+        mPlayFile = bundle.getString("playFile");
+        mPlayList = (List<ListFile>) bundle.getSerializable("playList");
+        Log.d(TAG, "play file = " + mPlayFile);
+        Log.d(TAG, "play list size = " + mPlayList.size());
 
         if (mVideoPlayer != null) {
+            mVideoPlayer.setSubmitText("");
             mVideoPlayer.setCallback(this);
             mVideoPlayer.setAutoPlay(true);
             mVideoPlayer.setAutoFullscreen(true);
-            mVideoPlayer.setBottomLabelText(file);
-            mVideoPlayer.setSource(Uri.fromFile(new File(file)));
+            mVideoPlayer.setBottomLabelText(mPlayFile);
+            mVideoPlayer.setSource(Uri.fromFile(new File(mPlayFile)));
         } else {
             Log.d(TAG, "mVideoPlayer is null");
         }
@@ -49,6 +57,13 @@ public class VideoPlayerActivity extends Activity implements EasyVideoCallback {
     protected void onPause() {
         super.onPause();
         mVideoPlayer.pause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPlayFile = "";
+        mPlayList = null;
     }
 
     @Override
@@ -95,5 +110,57 @@ public class VideoPlayerActivity extends Activity implements EasyVideoCallback {
     @Override
     public void onSubmit(EasyVideoPlayer player, Uri source) {
         Log.d(TAG, "on video submited uri = " + source);
+    }
+
+    @Override
+    public void onNext(EasyVideoPlayer player, Uri source) {
+        Log.d(TAG, "on video skip next");
+        int index = findIndexFromList(mPlayFile);
+        Log.d(TAG, "find index = " + index + ",size = " + mPlayList.size());
+        if (++index < mPlayList.size()) {
+            mPlayFile = mPlayList.get(index).getFile().getAbsolutePath();
+        }
+
+        if (mVideoPlayer != null) {
+            mVideoPlayer.setBottomLabelText(mPlayFile);
+            mVideoPlayer.setSource(Uri.fromFile(new File(mPlayFile)));
+        } else {
+            Log.d(TAG, "mVideoPlayer is null");
+        }
+
+    }
+
+    @Override
+    public void onPrev(EasyVideoPlayer player, Uri source) {
+        Log.d(TAG, "on video skip prev");
+        int index = findIndexFromList(mPlayFile);
+        Log.d(TAG, "find index = " + index + ",size = " + mPlayList.size());
+        if (index > 0) {
+            index--;
+            mPlayFile = mPlayList.get(index).getFile().getAbsolutePath();
+        }
+
+        if (mVideoPlayer != null) {
+            mVideoPlayer.setBottomLabelText(mPlayFile);
+            mVideoPlayer.setSource(Uri.fromFile(new File(mPlayFile)));
+        } else {
+            Log.d(TAG, "mVideoPlayer is null");
+        }
+
+    }
+
+    private int findIndexFromList(String file) {
+        int index = 0;
+        if (mPlayList != null) {
+            Iterator<ListFile> iterator = mPlayList.iterator();
+            while(iterator.hasNext()) {
+                ListFile listFile = iterator.next();
+                if (listFile.getFile().getAbsolutePath().equals(file)) {
+                    break;
+                }
+                index++;
+            }
+        }
+        return index;
     }
 }

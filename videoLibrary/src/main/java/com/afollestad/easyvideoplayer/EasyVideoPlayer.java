@@ -102,6 +102,7 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
     private TextView mLabelPosition;
     private TextView mLabelDuration;
     private ImageButton mBtnRestart;
+    private ImageButton mBtnNext;
     private TextView mBtnRetry;
     private ImageButton mBtnPlayPause;
     private TextView mBtnSubmit;
@@ -127,6 +128,7 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
     private CharSequence mRetryText;
     private CharSequence mSubmitText;
     private Drawable mRestartDrawable;
+    private Drawable mNextDrawable;
     private Drawable mPlayDrawable;
     private Drawable mPauseDrawable;
     private CharSequence mCustomLabelText;
@@ -187,12 +189,17 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
 
 
                 int restartDrawableResId = a.getResourceId(R.styleable.EasyVideoPlayer_evp_restartDrawable, -1);
+                int nextDrawableResId = a.getResourceId(R.styleable.EasyVideoPlayer_evp_nextDrawable, -1);
                 int playDrawableResId = a.getResourceId(R.styleable.EasyVideoPlayer_evp_playDrawable, -1);
                 int pauseDrawableResId = a.getResourceId(R.styleable.EasyVideoPlayer_evp_pauseDrawable, -1);
 
                 if (restartDrawableResId != -1) {
                     mRestartDrawable = AppCompatResources.getDrawable(context, restartDrawableResId);
                 }
+                if (nextDrawableResId != -1) {
+                    mNextDrawable = AppCompatResources.getDrawable(context, nextDrawableResId);
+                }
+
                 if (playDrawableResId != -1) {
                     mPlayDrawable = AppCompatResources.getDrawable(context, playDrawableResId);
                 }
@@ -230,6 +237,8 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
 
         if (mRestartDrawable == null)
             mRestartDrawable = AppCompatResources.getDrawable(context, R.drawable.evp_action_restart);
+        if (mNextDrawable == null)
+            mNextDrawable = AppCompatResources.getDrawable(context, R.drawable.evp_action_next);
         if (mPlayDrawable == null)
             mPlayDrawable = AppCompatResources.getDrawable(context, R.drawable.evp_action_play);
         if (mPauseDrawable == null)
@@ -841,6 +850,11 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
         mBtnRestart.setOnClickListener(this);
         mBtnRestart.setImageDrawable(mRestartDrawable);
 
+        mBtnNext = (ImageButton) mControlsFrame.findViewById(R.id.btnNext);
+        mBtnNext.setOnClickListener(this);
+        mBtnNext.setImageDrawable(mNextDrawable);
+
+
         mBtnRetry = (TextView) mControlsFrame.findViewById(R.id.btnRetry);
         mBtnRetry.setOnClickListener(this);
         mBtnRetry.setText(mRetryText);
@@ -877,14 +891,21 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
                 start();
             }
         } else if (view.getId() == R.id.btnRestart) {
-            seekTo(0);
-            if (!isPlaying()) start();
+//            seekTo(0);
+//            if (!isPlaying()) start();
+            if (mCallback != null) {
+                mCallback.onPrev(this, mSource);
+            }
         } else if (view.getId() == R.id.btnRetry) {
             if (mCallback != null)
                 mCallback.onRetry(this, mSource);
         } else if (view.getId() == R.id.btnSubmit) {
             if (mCallback != null)
                 mCallback.onSubmit(this, mSource);
+        } else if(view.getId() == R.id.btnNext) {
+            if (mCallback != null) {
+                mCallback.onNext(this, mSource);
+            }
         }
     }
 
@@ -1055,6 +1076,7 @@ public class EasyVideoPlayer extends FrameLayout implements IUserMethods, Textur
         mLabelBottom.setTextColor(labelColor);
         mPlayDrawable = tintDrawable(mPlayDrawable.mutate(), labelColor);
         mRestartDrawable = tintDrawable(mRestartDrawable.mutate(), labelColor);
+        mNextDrawable = tintDrawable(mNextDrawable.mutate(), labelColor);
         mPauseDrawable = tintDrawable(mPauseDrawable.mutate(), labelColor);
     }
 

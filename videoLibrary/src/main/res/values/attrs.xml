@@ -23,8 +23,10 @@
         <attr name="evp_bottomText" format="string" />
 
         <attr name="evp_restartDrawable" format="reference" />
+        <attr name="evp_nextDrawable" format="reference" />
         <attr name="evp_playDrawable" format="reference" />
         <attr name="evp_pauseDrawable" format="reference" />
+
 
         <attr name="evp_hideControlsOnPlay" format="boolean" />
         <attr name="evp_autoPlay" format="boolean" />

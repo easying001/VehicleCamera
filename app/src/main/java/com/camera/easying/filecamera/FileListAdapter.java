@@ -2,6 +2,7 @@ package com.camera.easying.filecamera;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,8 +154,12 @@ public class FileListAdapter extends BaseAdapter {
                             return;
                         }
                         Intent intent = new Intent(ctx, VideoPlayerActivity.class);
-                        intent.putExtra("playFile", path);
-                        intent.putExtra("allListFile", (Serializable) val);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("playFile", path);
+                        bundle.putSerializable("playList", (Serializable) val);
+                        intent.putExtras(bundle);
+                        // intent.putExtra("playFile", path);
+                        //intent.putExtra("allListFile", (Serializable) val);
                         ctx.startActivity(intent);
 
 //                        Intent intent = new Intent(Intent.ACTION_VIEW);

@@ -8,6 +8,8 @@
 /captures
 .externalNativeBuild
 *.o
+*.so
+*.a
 .idea/
 libuvccamera/build/
 libuvccamera/src/main/obj/
