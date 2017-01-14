@@ -62,6 +62,7 @@ public class UsbAdapter {
                 }
             }
         }
+        mInstance.getDevParam();
         return mInstance;
     }
 

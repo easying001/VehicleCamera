@@ -51,6 +51,9 @@ public class AdapterService extends Service{
     private byte[] randomKey;
     private byte[] privateKey = {1,2,1,2,1};
 
+    public  UsbCameraRecordState mUsbCameraRecordState;
+    public  UsbCameraDeviceParam mUsbCameraDeviceParam;
+
     void Cleanup() {
         if (mCleaningUp) {
             return;
@@ -154,8 +157,14 @@ public class AdapterService extends Service{
 
         public UsbCameraRecordState getRecordState() {
             AdapterService service = getService();
+            Log.d("UsbService", "getRecordState -----" +service.mUsbCameraRecordState);
+
             if (service != null) {
-                return service.getRecordState();
+                if (service.mUsbCameraRecordState == null)
+                {
+                    service.mUsbCameraRecordState = service.getRecordState();
+                }
+                return service.mUsbCameraRecordState;
             } else {
                 return null;
             }
@@ -163,8 +172,14 @@ public class AdapterService extends Service{
 
         public UsbCameraDeviceParam getDevParam() {
             AdapterService service = getService();
+            Log.d("UsbService", "getDevParam -----" +service.mUsbCameraDeviceParam);
+
             if (service != null) {
-                return service.getDevParam();
+                if (service.mUsbCameraDeviceParam == null)
+                {
+                    service.mUsbCameraDeviceParam = service.getDevParam();
+                }
+                return service.mUsbCameraDeviceParam;
             } else {
                 return null;
             }
@@ -239,6 +254,7 @@ public class AdapterService extends Service{
             AdapterService service = getService();
             if (service != null) {
                 service.setMic(level);
+                service.mUsbCameraRecordState.volumn_level = (byte)level;
             }
         }
 
@@ -246,6 +262,7 @@ public class AdapterService extends Service{
             AdapterService service = getService();
             if (service != null) {
                 service.setGsensorSensitivity(sensitivity);
+                service.mUsbCameraDeviceParam.gSensorSensitivity = sensitivity;
             }
         }
 
@@ -455,7 +472,7 @@ public class AdapterService extends Service{
                 if (device.getProductId() == UsbId.SONIX_BULK) {
                     long time = System.currentTimeMillis() / 1000;
                     setDevTime(time, (byte) 0x08);
-                    showRecordState();
+                    //showRecordState();
                 } else if (device.getProductId() == UsbId.SONIX_STORAGE) {
                     setUsbCameraMode();
                 }
