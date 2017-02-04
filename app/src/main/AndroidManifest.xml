@@ -48,7 +48,11 @@
         </activity>
 
         <activity android:name=".VideoPlayerActivity"
-                  android:screenOrientation="landscape" >
+            android:screenOrientation="landscape" >
+
+        </activity>
+        <activity android:name=".PhotoShowActivity"
+            android:screenOrientation="landscape" >
 
         </activity>
 
