@@ -3,6 +3,7 @@ package com.camera.easying.filecamera;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +36,6 @@ public class FileListAdapter extends BaseAdapter {
     private List<String> postionKeys;
     private List<ListFile> allListFile = new ArrayList<>();
     private Context ctx;
-    private String photoList = null;
     private String mSuffix;
     private String mSuffix1;
 
@@ -93,7 +93,7 @@ public class FileListAdapter extends BaseAdapter {
             tvCount.setText(count + "张");
         }
 
-        photoList = "";
+        //photoList = "";
         for (int i = 0; i < val.size(); i++) {
             final File file = val.get(i).getFile();
             if (file.length() == 0) {
@@ -102,11 +102,11 @@ public class FileListAdapter extends BaseAdapter {
             final String path = file.getAbsolutePath();
             final ImageView img = new ImageView(ctx);
             final TextView text = new TextView(ctx);
-            if(photoList.equals("")) {
+/*            if(photoList.equals("")) {
                 photoList += path;
             }else {
                 photoList += "," + path;
-            }
+            }*/
             LinearLayout gridItemLayout = new LinearLayout(ctx);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             gridItemLayout.setOrientation(LinearLayout.VERTICAL);
@@ -148,6 +148,8 @@ public class FileListAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (path.endsWith(".avi") || path.endsWith(".mp4")) {
+                        Log.d("ttt", "to Video show ------------");
+
                         File file = new File(path);
                         if(!file.exists()) {
                             //Toast.makeText(ctx, getString(R.string.file_not_exist_check_sdcard), Toast.LENGTH_SHORT).show();
@@ -180,15 +182,23 @@ public class FileListAdapter extends BaseAdapter {
 //                        intent.setDataAndType(Uri.parse(path), "video/"+strend);
 //                        ctx.startActivity(intent);
                     } else {
+                        Log.d("ttt", "to phone show ------------");
+
                         File file = new File(path);
                         if(!file.exists()) {
                             //Toast.makeText(getActivity(), getString(R.string.file_not_exist_check_sdcard), Toast.LENGTH_SHORT).show();
                             return;
                         }
-//                        Intent i = new Intent(ctx, PhotoShowActivity.class);
-//                        i.putExtra("filename", path);
-//                        i.putExtra("filelist", photoList);
-//                        ctx.startActivity(i);
+                        Intent intent = new Intent(ctx, PhotoShowActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("filepath", path);
+                        bundle.putSerializable("filelist", (Serializable) val);
+
+                        intent.putExtras(bundle);
+                        //intent.putExtra("filepath", path);
+                        //intent.putExtra("filelist", (Serializable) val);
+                        ctx.startActivity(intent);
+                        Log.d("ttt", "to phone show -----------ok-");
                     }
                 }
             });
