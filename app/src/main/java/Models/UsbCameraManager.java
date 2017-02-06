@@ -15,8 +15,10 @@ import com.serenegiant.usb.UVCCamera;
 
 import Contracts.UsbCameraManagerContract;
 
+import Widgets.SimpleCameraTextureView;
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.SurfaceTexture;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.util.Log;
@@ -36,6 +38,7 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
     private UsbManager mUsbManager = null;
     private static UsbCameraManager mInstance = null;
     private SurfaceView mPreviewSurfaceView;
+    private SimpleCameraTextureView mPreviewTextView;
     public Surface mPreviewSurface;
     public USBMonitor mUSBMonitor;
     public UVCCamera mUVCCamera;
@@ -73,6 +76,7 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
         synchronized (mSync) {
             if (mUVCCamera != null) {
                 mUVCCamera.destroy();
+                // mUsbAdapter.stopDevice();
                 mUVCCamera = null;
             }
             isActive = isPreview = false;
@@ -88,7 +92,11 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
             mUSBMonitor = null;
         }
         mStateListener = null;
-        mPreviewSurface = null;
+        if (mPreviewSurface != null) {
+            mPreviewSurface.release();
+            mPreviewSurface = null;
+        }
+
         mPreviewSurfaceView = null;
         // Release resource for Usb Driver
 //        try {
@@ -180,8 +188,6 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
 
                 }
             }
-
-
             EXECUTER.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -190,6 +196,10 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
                         mUVCCamera.open(ctrlBlock);
                         // UsbAdapter.getInstance().setUsbConnection(ctrlBlock.getUsbDeviceConnection());
                         //Log.d("UsbCamera", "SupportedSize: " + mUsbAdapter.getVideoParam());
+                        if (mPreviewSurface != null) {
+                            mPreviewSurface.release();
+                            mPreviewSurface = null;
+                        }
 
                         try {
                             mUVCCamera.setPreviewSize(UVCCamera.DEFAULT_PREVIEW_WIDTH, UVCCamera
@@ -203,12 +213,13 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
                                 mUVCCamera = null;
                             }
                         }
-                        if ((mUVCCamera != null) && (mPreviewSurface != null)) {
-                            Log.d("UsbCamera", "mUVCCamera.startPreview())");
+                        final SurfaceTexture st = mPreviewTextView.getSurfaceTexture();
+
+                        if ((mUVCCamera != null) && (st != null)) {
+                            Log.d("UsbCamera", "surface Textview = " + st);
+                            mPreviewSurface = new Surface(st);
                             mUVCCamera.setPreviewDisplay(mPreviewSurface);
-
                             mUsbAdapter.setAuthChallenge();
-
                             if (mUsbAdapter.getAuthResponse()) {
                                 mUVCCamera.startPreview();
                                 isPreview = true;
@@ -218,8 +229,6 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
                             }
                         }
                         isActive = true;
-
-
                     }
                 }
             });
@@ -227,7 +236,9 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
 
         @Override
         public void onDisconnect(UsbDevice device, USBMonitor.UsbControlBlock ctrlBlock) {
+            uninit();
         }
+
 
         @Override
         public void onCancel() {
@@ -240,19 +251,35 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
         mPreviewSurfaceView.getHolder().addCallback(mSurfaceCallback);
     }
 
+    @Override
+    public void setPreviewTextureView(SimpleCameraTextureView textureView) {
+        mPreviewTextView = textureView;
+
+    }
+
     private final SurfaceHolder.Callback mSurfaceCallback = new SurfaceHolder.Callback() {
         @Override
         public void surfaceCreated(SurfaceHolder holder) {
             Log.d("UsbCamera", "surfaceCreated");
+
         }
 
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-            if ((width == 0) || (height == 0)) {
+            Log.d("UsbCamera", "surfaceChanged" + ",format = " + format + ",width = " + width + ", height = " + height);
+
+            if ((width != 1280) && (height != 720)) {
+                holder.setFixedSize(1280, 720);
                 return;
             }
-            Log.d("UsbCamera", "surfaceChanged" + "，isActive=" + isActive + "，isPreview=" + isPreview);
-            //holder.setFormat(PixelFormat.RGBA_8888);
+
+            if (format != PixelFormat.RGBA_8888) {
+                holder.setFormat(PixelFormat.RGBA_8888);
+                return;
+            }
+
+            // Log.d("UsbCamera", "surfaceChanged" + ",format = " + format + ",width = " + width + ", height = " +
+            //        height);
             mPreviewSurface = holder.getSurface();
             synchronized(mSync) {
                 if (isActive && !isPreview) {
@@ -274,6 +301,7 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
             synchronized(mSync) {
                 if (mUVCCamera != null) {
                     mUVCCamera.stopPreview();
+                    // mUsbAdapter.stopDevice();
                 }
                 isPreview = false;
                 if (mStateListener != null) {

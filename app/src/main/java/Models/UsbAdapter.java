@@ -259,6 +259,12 @@ public class UsbAdapter {
         return device;
     }
 
+    public void stopDevice() {
+        if (mBinder != null) {
+            mBinder.stopDevice();
+        }
+    }
+
 
     private void startService(Class<?> serviceClass) {
         Log.d("UsbActivity", "startService ");

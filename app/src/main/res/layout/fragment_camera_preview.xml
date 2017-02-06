@@ -8,9 +8,15 @@
 
     <SurfaceView
             android:id="@+id/sv_camera_preview"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-
+    <Widgets.SimpleCameraTextureView
+            android:id="@+id/tv_camera_preview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="#ff000000"/>
     <LinearLayout
         android:layout_gravity="bottom"
         android:layout_width="match_parent"

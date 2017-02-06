@@ -1,5 +1,6 @@
 package Views;
 
+import Widgets.SimpleCameraTextureView;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.camera.easying.filecamera.R;
 import com.camera.easying.filecamera.UsbFragmentManager;
+import com.serenegiant.usb.UVCCamera;
 
 import Presenters.MvpPresenter;
 import Presenters.MvpUsbCameraPresenter;
@@ -33,7 +35,8 @@ public class MvpUsbCameraFragment extends MvpFragment<MvpUsbCameraPresenter> imp
     private ImageButton ib_start_protected;
     private ImageButton ib_enable_mic;
     public ImageButton ib_start_protected_record;
-    private SurfaceView mSurfaceView;
+    // private SurfaceView mSurfaceView;
+    private SimpleCameraTextureView mUVCCameraView;
     private static ProgressDialog mUsbCameraProgressDialog;
 
     public static MvpUsbCameraFragment newInstance() {
@@ -72,8 +75,9 @@ public class MvpUsbCameraFragment extends MvpFragment<MvpUsbCameraPresenter> imp
         ib_start_protected_record.setOnClickListener(this);
         ib_enable_mic.setOnClickListener(this);
 
-        mSurfaceView = (SurfaceView) mContentView.findViewById(R.id.sv_camera_preview);
-
+        // mSurfaceView = (SurfaceView) mContentView.findViewById(R.id.sv_camera_preview);
+        mUVCCameraView = (SimpleCameraTextureView) mContentView.findViewById(R.id.tv_camera_preview);
+        mUVCCameraView.setAspectRatio(UVCCamera.DEFAULT_PREVIEW_WIDTH/ (float)UVCCamera.DEFAULT_PREVIEW_HEIGHT);
         return mContentView;
     }
 
@@ -87,7 +91,7 @@ public class MvpUsbCameraFragment extends MvpFragment<MvpUsbCameraPresenter> imp
     @Override
     public void onResume() {
         super.onResume();
-        presenter.recoverPreview();
+        // presenter.recoverPreview();
     }
 
     @Override
@@ -180,9 +184,12 @@ public class MvpUsbCameraFragment extends MvpFragment<MvpUsbCameraPresenter> imp
         }
     }
 
-    public SurfaceView getmSurfaceView() {
-        return mSurfaceView;
-    }
+//    public SurfaceView getmSurfaceView() {
+//        return mSurfaceView;
+//    }
 
+    public SimpleCameraTextureView getUVCTextureView() {
+        return mUVCCameraView;
+    }
 
 }

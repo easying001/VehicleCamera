@@ -3,6 +3,7 @@
  */
 package Contracts;
 
+import Widgets.SimpleCameraTextureView;
 import android.view.Surface;
 import android.view.SurfaceView;
 
@@ -13,6 +14,7 @@ import android.view.SurfaceView;
 public interface UsbCameraManagerContract {
     interface UsbCameraManagement {
         void setPreviewSurfaceView(SurfaceView surface);
+        void setPreviewTextureView(SimpleCameraTextureView textureView);
     }
 
 }

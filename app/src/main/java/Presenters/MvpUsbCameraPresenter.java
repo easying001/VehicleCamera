@@ -95,8 +95,9 @@ public class MvpUsbCameraPresenter extends MvpBasePresenter<MvpUsbCameraFragment
 
             // new UsbCameraScanDevice().execute("scan usb device");
             // getView().showProgressDialog();
-            Log.d(TAG, "setPreviewSurfaceView = " + getView().getmSurfaceView());
-            mUsbCameraManager.setPreviewSurfaceView(getView().getmSurfaceView());
+//            Log.d(TAG, "setPreviewSurfaceView = " + getView().getmSurfaceView());
+//            mUsbCameraManager.setPreviewSurfaceView(getView().getmSurfaceView());
+            mUsbCameraManager.setPreviewTextureView(getView().getUVCTextureView());
             startPreview();
         }
     }
@@ -138,13 +139,15 @@ public class MvpUsbCameraPresenter extends MvpBasePresenter<MvpUsbCameraFragment
 
     private void startPreview() {
         if (!mUsbCameraManager.getPreviewState()) {
-            Log.d(TAG, "startPreview: isPreview = false");
+            Log.d(TAG, "startPreview(): isPreview = false");
             IUsbDriver driver = mUsbAdapter.getLoadedDriver();
             if (driver != null) {
+                Log.d(TAG, "startPreview: driver = " + driver);
                 UsbCameraManager.getInstance().mUSBMonitor.requestPermission(driver.getDevice(),
                         driver.getPorts().get(0).getConnection());
             } else {
-
+                Log.d(TAG, "startPreview: driver = null");
+                mUsbAdapter.discoverAllDevice();
             }
         }
     }
@@ -209,6 +212,7 @@ public class MvpUsbCameraPresenter extends MvpBasePresenter<MvpUsbCameraFragment
             mUsbAdapter.startProtectedRecord(60);
         }
     }
+
     // toggle enable or disable mic
     public void enableOrDisableMic() {
         if (mUsbAdapter != null && mUsbAdapter.isUsbCameraOpened()) {
@@ -234,44 +238,42 @@ public class MvpUsbCameraPresenter extends MvpBasePresenter<MvpUsbCameraFragment
         }
     }
 
-    private class UsbCameraScanDevice extends AsyncTask<String, String, String> {
-        @Override
-        protected void onPreExecute() {
-            getView().showProgressDialog();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            getView().dismissProgressDialog();
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            Log.d(TAG, "UsbCameraScanDevice - doInBackground()");
-            int downCounter = 10;
-            while(downCounter-- > 0) {
-
-                if (mUsbAdapter.isUsbCameraDeviceConnected() == true) {
-                    mHandler.obtainMessage(MSG_START_PREVIEW).sendToTarget();
-                    break;
-                }
-                try {
-                    Thread.sleep(500);
-                    publishProgress("Starting UVC Previewing");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-            mHandler.obtainMessage(MSG_START_DIALOG).sendToTarget();
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(String... values) {
-            getView().setProgressDialog(values[0]);
-        }
-    }
-
-
+//    private class UsbCameraScanDevice extends AsyncTask<String, String, String> {
+//        @Override
+//        protected void onPreExecute() {
+//            getView().showProgressDialog();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            getView().dismissProgressDialog();
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... strings) {
+//            Log.d(TAG, "UsbCameraScanDevice - doInBackground()");
+//            int downCounter = 10;
+//            while(downCounter-- > 0) {
+//
+//                if (mUsbAdapter.isUsbCameraDeviceConnected() == true) {
+//                    mHandler.obtainMessage(MSG_START_PREVIEW).sendToTarget();
+//                    break;
+//                }
+//                try {
+//                    Thread.sleep(500);
+//                    publishProgress("Starting UVC Previewing");
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//            mHandler.obtainMessage(MSG_START_DIALOG).sendToTarget();
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onProgressUpdate(String... values) {
+//            getView().setProgressDialog(values[0]);
+//        }
+//    }
 }

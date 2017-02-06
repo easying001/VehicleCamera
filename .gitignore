@@ -10,6 +10,7 @@
 *.o
 *.so
 *.a
+libUVCCamera.so
 .idea/
 libuvccamera/build/
 libuvccamera/src/main/obj/

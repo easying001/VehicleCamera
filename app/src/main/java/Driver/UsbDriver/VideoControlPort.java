@@ -66,13 +66,19 @@ public class VideoControlPort extends CommonUsbPort implements IUsbVideoPort{
 
     @Override
     public void close() throws IOException {
+        if (mConnection != null) {
+            mConnection.close();
+        }
         mConnection = null;
         setPortState(STATE_IDLE);
+        Log.d("UsbPort", "close usb video port!!!");
     }
+
+
 
     private int sendControlMessage(int requestType, int request, int value, int index, byte[] buf) {
         int ret = 0;
-        Log.d("UsbCommunication", "sendControlMessage");
+        Log.d("UsbCommunication", "start sending usb control message");
         // With the latest UVC firmware, DO NOT release data interface and claim data interface
         // Only just claim control interface and release control interface, otherwise, preview will stop
         //mConnection.releaseInterface(mDataInterface);
@@ -80,6 +86,7 @@ public class VideoControlPort extends CommonUsbPort implements IUsbVideoPort{
         ret = mConnection.controlTransfer(
                 requestType, request, value, index, buf, buf != null ? buf.length : 0, 5000);
         mConnection.releaseInterface(mControlInterface);
+        Log.d("UsbCommunication", "finish sending usb control message");
         //mConnection.claimInterface(mDataInterface, true);
 
         return ret;

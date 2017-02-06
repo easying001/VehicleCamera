@@ -56,16 +56,23 @@ public class MainActivity extends MvpActivity<MvpMainActivityPresenter> implemen
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
 
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume");
     }
 
     public void selectButton(int id) {
