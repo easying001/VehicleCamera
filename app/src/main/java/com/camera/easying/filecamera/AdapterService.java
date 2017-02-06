@@ -64,6 +64,7 @@ public class AdapterService extends Service{
             mBinder = null;
         }
     }
+
     public static class AdapterServiceBinder extends Binder {
         private AdapterService mService;
 
@@ -102,6 +103,13 @@ public class AdapterService extends Service{
                 return service.getConnectedUsbDevice();
             } else {
                 return null;
+            }
+        }
+
+        public void stopDevice() {
+            AdapterService service = getService();
+            if (service != null) {
+                service.stopDevice();
             }
         }
 
@@ -343,6 +351,7 @@ public class AdapterService extends Service{
     @Override
     public void onDestroy() {
         super.onDestroy();
+        stopDevice();
         Log.d("UsbService", "onDestroy");
     }
 
@@ -430,6 +439,8 @@ public class AdapterService extends Service{
         UsbVideoProber.getInstance().unloadUsbDriver(device);
     }
 
+
+
     private void stopDevice(UsbDevice device) {
         if (mUsbDriver == null) {
             return;
@@ -468,7 +479,8 @@ public class AdapterService extends Service{
             Log.d("UsbService", "permission has been granted, just setup device");
             mUsbPort = mUsbDriver.getPorts().get(0);
             try {
-                mUsbPort.open(mUsbManager);
+                if (mUsbPort.getConnection() == null)
+                    mUsbPort.open(mUsbManager);
                 if (device.getProductId() == UsbId.SONIX_BULK) {
                     long time = System.currentTimeMillis() / 1000;
                     setDevTime(time, (byte) 0x08);
@@ -997,6 +1009,23 @@ public class AdapterService extends Service{
         if (mUsbPort != null) {
             ((IUsbVideoPort)mUsbPort).setFormatSdCard(data);
         }
+    }
+
+    void stopDevice() {
+        if (mUsbDriver == null) {
+            return;
+        }
+
+        IUsbBasePort port = mUsbDriver.getPorts().get(0);
+        try {
+            port.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mUsbDriver = null;
+        mUsbPort = null;
+        Log.d("UsbService", "clear mUsbDriver and close usb device");
+
     }
 
 
