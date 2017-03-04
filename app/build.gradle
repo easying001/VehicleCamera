@@ -6,7 +6,7 @@ android {
     buildToolsVersion project.ext.buildToolsVersion
     
     defaultConfig {
-        applicationId "com.camera.easying.filecamera"
+        applicationId "com.easying.vehiclecamera"
         minSdkVersion project.ext.minSdkVer
         targetSdkVersion project.ext.targetSdkVer
         versionCode 1
@@ -48,4 +48,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile project(path: ':videoLibrary')
+    compile 'com.apkfuns.logutils:library:1.4.2.2'
 }

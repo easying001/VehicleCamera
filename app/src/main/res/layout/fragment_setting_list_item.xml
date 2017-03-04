@@ -11,13 +11,13 @@
         android:textColor="#ffffff"
         />
 
-    <Views.MvpStatusButton
+    <com.easying.vehiclecamera.widgets.MvpStatusButton
         android:id="@+id/sb_setting_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true">
-    </Views.MvpStatusButton>
+    </com.easying.vehiclecamera.widgets.MvpStatusButton>
 
     <ImageView
         android:id="@+id/iv_direction"
