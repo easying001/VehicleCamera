@@ -44,8 +44,8 @@ public class UVCCamera {
 	private static final String TAG = UVCCamera.class.getSimpleName();
 	private static final String DEFAULT_USBFS = "/dev/bus/usb";
 
-	public static final int DEFAULT_PREVIEW_WIDTH = 1280;
-	public static final int DEFAULT_PREVIEW_HEIGHT = 720;
+	public static final int DEFAULT_PREVIEW_WIDTH = 1024;//1280;
+	public static final int DEFAULT_PREVIEW_HEIGHT = 600;//720;
 	public static final int DEFAULT_PREVIEW_MODE = 1;
 	public static final int DEFAULT_PREVIEW_MIN_FPS = 1;
 	public static final int DEFAULT_PREVIEW_MAX_FPS = 30;

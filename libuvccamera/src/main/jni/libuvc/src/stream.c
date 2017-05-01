@@ -1396,7 +1396,7 @@ uvc_error_t uvc_stream_start_bandwidth(uvc_stream_handle_t *strmh,
 	frame_desc = uvc_find_frame_desc_stream(strmh, ctrl->bFormatIndex, ctrl->bFrameIndex);
 	if (UNLIKELY(!frame_desc)) {
 		ret = UVC_ERROR_INVALID_PARAM;
-		LOGE("UVC_ERROR_INVALID_PARAM");
+		LOGI("UVC_ERROR_INVALID_PARAM");
 		goto fail;
 	}
 	format_desc = frame_desc->parent;
@@ -1404,7 +1404,7 @@ uvc_error_t uvc_stream_start_bandwidth(uvc_stream_handle_t *strmh,
 	strmh->frame_format = uvc_frame_format_for_guid(format_desc->guidFormat);
 	if (UNLIKELY(strmh->frame_format == UVC_FRAME_FORMAT_UNKNOWN)) {
 		ret = UVC_ERROR_NOT_SUPPORTED;
-		LOGE("unlnown frame format");
+		LOGI("unlnown frame format");
 		goto fail;
 	}
 	const uint32_t dwMaxVideoFrameSize = ctrl->dwMaxVideoFrameSize <= frame_desc->dwMaxVideoFrameBufferSize
@@ -1413,13 +1413,14 @@ uvc_error_t uvc_stream_start_bandwidth(uvc_stream_handle_t *strmh,
 	// Get the interface that provides the chosen format and frame configuration
 	interface_id = strmh->stream_if->bInterfaceNumber;
 	interface = &strmh->devh->info->config->interface[interface_id];
-	LOGV("interface_id = %d", interface_id);
+
 	/* A VS interface uses isochronous transfers if it has multiple altsettings.
 	 * (UVC 1.5: 2.4.3. VideoStreaming Interface, on page 19) */
-	//isochronous = interface->num_altsetting > 1;
-	isochronous = 0;
+	isochronous = interface->num_altsetting > 1;
+	LOGI("interface_id = %d, ios = %d", interface_id, isochronous);
+	//isochronous = 0;
 	if (isochronous) {
-		MARK("isochronous transfer mode");
+		LOGI("isochronous transfer mode");
 		/* For isochronous streaming, we choose an appropriate altsetting for the endpoint
 		 * and set up several transfers */
 		const struct libusb_interface_descriptor *altsetting;
@@ -1523,7 +1524,7 @@ uvc_error_t uvc_stream_start_bandwidth(uvc_stream_handle_t *strmh,
 		} */
 
 		/* Select the altsetting */
-		MARK("Select the altsetting");
+		LOGI("Select the altsetting");
 		ret = libusb_set_interface_alt_setting(strmh->devh->usb_devh,
 				altsetting->bInterfaceNumber, altsetting->bAlternateSetting);
 		if (UNLIKELY(ret != UVC_SUCCESS)) {
@@ -1532,7 +1533,7 @@ uvc_error_t uvc_stream_start_bandwidth(uvc_stream_handle_t *strmh,
 		}
 
 		/* Set up the transfers */
-		MARK("Set up the transfers");
+		LOGI("Set up the transfers");
 		for (transfer_id = 0; transfer_id < LIBUVC_NUM_TRANSFER_BUFS; ++transfer_id) {
 			transfer = libusb_alloc_transfer(packets_per_transfer);
 			strmh->transfers[transfer_id] = transfer;

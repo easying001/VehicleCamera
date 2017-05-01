@@ -3,6 +3,7 @@
  */
 package Models;
 
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.serenegiant.usb.CameraDialog;
 import com.serenegiant.usb.DeviceFilter;
+import com.serenegiant.usb.IFrameCallback;
 import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.UVCCamera;
 
@@ -30,7 +32,8 @@ import android.view.SurfaceView;
  * Created by yangjie11 on 2016/9/10.
  */
 
-public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManagement, CameraDialog.CameraDialogParent{
+public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManagement, CameraDialog
+        .CameraDialogParent, IFrameCallback {
     private static final int CORE_POOL_SIZE = 1;		// initial/minimum threads
     private static final int MAX_POOL_SIZE = 4;			// maximum threads
     private static final int KEEP_ALIVE_TIME = 10;		// time periods while keep the idle thread
@@ -47,6 +50,18 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
     private final Object mSync = new Object();
     private OnCameraStateChange mStateListener;
     private UsbAdapter mUsbAdapter;
+
+    public static IFrameCallback mCameraFrameCallback = new IFrameCallback() {
+        @Override
+        public void onFrame(ByteBuffer frame) {
+            Log.d("UsbCamera", "on new frame size = " + frame.capacity());
+        }
+    };
+
+    @Override
+    public void onFrame(ByteBuffer frame) {
+
+    }
 
     public interface OnCameraStateChange {
         void onPreviewStateChange(boolean isPreview);
@@ -69,6 +84,7 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
         mUSBMonitor = new USBMonitor(mContext, mDeviceConnectListener);
         mUSBMonitor.register();
         mUsbAdapter = UsbAdapter.getInstance();
+
     }
 
     public void uninit() {
@@ -193,6 +209,7 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
                 public void run() {
                     synchronized(mSync) {
                         mUVCCamera = new UVCCamera();
+
                         mUVCCamera.open(ctrlBlock);
                         // UsbAdapter.getInstance().setUsbConnection(ctrlBlock.getUsbDeviceConnection());
                         //Log.d("UsbCamera", "SupportedSize: " + mUsbAdapter.getVideoParam());
@@ -219,14 +236,21 @@ public class UsbCameraManager implements UsbCameraManagerContract.UsbCameraManag
                             Log.d("UsbCamera", "surface Textview = " + st);
                             mPreviewSurface = new Surface(st);
                             mUVCCamera.setPreviewDisplay(mPreviewSurface);
-                            mUsbAdapter.setAuthChallenge();
-                            if (mUsbAdapter.getAuthResponse()) {
-                                mUVCCamera.startPreview();
-                                isPreview = true;
-                                if (mStateListener != null) {
-                                    mStateListener.onPreviewStateChange(true);
-                                }
+                            mUVCCamera.setFrameCallback(mCameraFrameCallback, 1);
+                            mUVCCamera.startPreview();
+                            isPreview = true;
+                            if (mStateListener != null) {
+                                mStateListener.onPreviewStateChange(true);
                             }
+//                            mUsbAdapter.setAuthChallenge();
+//                            if (mUsbAdapter.getAuthResponse()) {
+//                                mUVCCamera.setFrameCallback(mCameraFrameCallback, 1);
+//                                mUVCCamera.startPreview();
+//                                isPreview = true;
+//                                if (mStateListener != null) {
+//                                    mStateListener.onPreviewStateChange(true);
+//                                }
+//                            }
                         }
                         isActive = true;
                     }
